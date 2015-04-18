@@ -8,4 +8,7 @@
     <string name="question_forgot_password">Forgot your password?</string>
     <string name="question_not_member">Not a member?</string>
     <string name="action_register">Register</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
 </resources>

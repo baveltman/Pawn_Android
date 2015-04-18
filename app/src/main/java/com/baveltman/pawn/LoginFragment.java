@@ -14,17 +14,11 @@ public class LoginFragment extends Fragment {
 
     private static final String TAG = "LoginRegsitrationFragment";
 
-    //typeFaces
-    private Typeface mLogoTypeFace;
-    private Typeface mRegularTextTypeFace;
-    private Typeface mBoldTextTypeFace;
-    private Typeface mBlackTypeFace;
-
     //login member variables
     private TextView mLogoText;
     private EditText mUsername;
     private EditText mPassword;
-    private Button mLoginButton;
+    private TextView mLoginButton;
     private TextView mForgotPasswordText;
     private TextView mNotMemberText;
     private TextView mRegisterText;
@@ -43,7 +37,6 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, parent, false);
 
-        setupTypefaces();
         bindLoginElements(v);
         setRegisterRedirect();
 
@@ -68,32 +61,27 @@ public class LoginFragment extends Fragment {
 
     private void bindLoginElements(View v) {
         mLogoText = (TextView)v.findViewById(R.id.logo_text);
-        mLogoText.setTypeface(mLogoTypeFace);
+        mLogoText.setTypeface(((LoginRegistrationActivity)getActivity()).getLogoTypeFace());
 
         mUsername = (EditText)v.findViewById(R.id.username);
-        mUsername.setTypeface(mRegularTextTypeFace);
+        mUsername.setTypeface(((LoginRegistrationActivity)getActivity()).getRegularTextTypeFace());
 
         mPassword = (EditText)v.findViewById(R.id.password);
-        mPassword.setTypeface(mRegularTextTypeFace);
+        mPassword.setTypeface(((LoginRegistrationActivity)getActivity()).getRegularTextTypeFace());
 
-        mLoginButton = (Button)v.findViewById(R.id.login_button);
-        mLoginButton.setTypeface(mBoldTextTypeFace);
+        mLoginButton = (TextView)v.findViewById(R.id.login_button);
+        mLoginButton.setTypeface(((LoginRegistrationActivity)getActivity()).getBoldTextTypeFace());
 
         mForgotPasswordText = (TextView)v.findViewById(R.id.forgot_password);
-        mForgotPasswordText.setTypeface(mBoldTextTypeFace);
+        mForgotPasswordText.setTypeface(((LoginRegistrationActivity)getActivity()).getBoldTextTypeFace());
 
         mNotMemberText = (TextView)v.findViewById(R.id.not_member_text);
-        mNotMemberText.setTypeface(mBoldTextTypeFace);
+        mNotMemberText.setTypeface(((LoginRegistrationActivity)getActivity()).getBoldTextTypeFace());
 
         mRegisterText = (TextView)v.findViewById(R.id.register_text);
-        mRegisterText.setTypeface(mBlackTypeFace);
+        mRegisterText.setTypeface(((LoginRegistrationActivity)getActivity()).getBlackTypeFace());
     }
 
-    private void setupTypefaces() {
-        mLogoTypeFace = Typeface.createFromAsset(getActivity().getAssets(), "Good Day.ttf");
-        mRegularTextTypeFace = Typeface.createFromAsset(getActivity().getAssets(), "Lato-Regular.ttf");
-        mBoldTextTypeFace = Typeface.createFromAsset(getActivity().getAssets(), "Lato-Bold.ttf");
-        mBlackTypeFace = Typeface.createFromAsset(getActivity().getAssets(), "Lato-Black.ttf");
-    }
+
 
 }

@@ -4,6 +4,7 @@ package com.baveltman.pawn;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
@@ -11,6 +12,13 @@ import android.support.v7.app.ActionBarActivity;
 public class LoginRegistrationActivity extends Activity
         implements FragmentManager.OnBackStackChangedListener {
 
+    //typeFaces
+    private Typeface mLogoTypeFace;
+    private Typeface mRegularTextTypeFace;
+    private Typeface mBoldTextTypeFace;
+    private Typeface mBlackTypeFace;
+
+    //boolean to track whether we are in login or registration fragment
     private boolean mShowingRegistration = false;
 
 
@@ -34,6 +42,31 @@ public class LoginRegistrationActivity extends Activity
         // Monitor back stack changes to ensure the action bar shows the appropriate
         // button (either "photo" or "info").
         getFragmentManager().addOnBackStackChangedListener(this);
+
+        setupTypefaces();
+    }
+
+    private void setupTypefaces() {
+        mLogoTypeFace = Typeface.createFromAsset(getAssets(), "Good Day.ttf");
+        mRegularTextTypeFace = Typeface.createFromAsset(getAssets(), "Lato-Regular.ttf");
+        mBoldTextTypeFace = Typeface.createFromAsset(getAssets(), "Lato-Bold.ttf");
+        mBlackTypeFace = Typeface.createFromAsset(getAssets(), "Lato-Black.ttf");
+    }
+
+    public Typeface getLogoTypeFace(){
+        return mLogoTypeFace;
+    }
+
+    public Typeface getRegularTextTypeFace(){
+        return mRegularTextTypeFace;
+    }
+
+    public Typeface getBoldTextTypeFace(){
+        return mRegularTextTypeFace;
+    }
+
+    public Typeface getBlackTypeFace(){
+        return mBlackTypeFace;
     }
 
     @Override
