@@ -1,9 +1,8 @@
 package com.baveltman.pawn;
 
-import android.app.Activity;
+import android.app.Fragment;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.lang.reflect.Type;
-
-public class LoginRegisterFragment extends Fragment {
+public class LoginFragment extends Fragment {
 
     private static final String TAG = "LoginRegsitrationFragment";
 
@@ -33,6 +30,7 @@ public class LoginRegisterFragment extends Fragment {
     private TextView mRegisterText;
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +41,29 @@ public class LoginRegisterFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_login_register, parent, false);
+        View v = inflater.inflate(R.layout.fragment_login, parent, false);
 
         setupTypefaces();
         bindLoginElements(v);
+        setRegisterRedirect();
 
         return v;
+    }
+
+    private void setRegisterRedirect() {
+        mNotMemberText.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                ((LoginRegistrationActivity)getActivity()).flipCard();
+            }
+        });
+
+        mRegisterText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((LoginRegistrationActivity)getActivity()).flipCard();
+            }
+        });
     }
 
     private void bindLoginElements(View v) {
@@ -81,11 +96,4 @@ public class LoginRegisterFragment extends Fragment {
         mBlackTypeFace = Typeface.createFromAsset(getActivity().getAssets(), "Lato-Black.ttf");
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (getActivity().getActionBar() != null) {
-            getActivity().getActionBar().hide();
-        }
-    }
 }
