@@ -21,6 +21,7 @@ public class LoginRegisterFragment extends Fragment {
     private Typeface mLogoTypeFace;
     private Typeface mRegularTextTypeFace;
     private Typeface mBoldTextTypeFace;
+    private Typeface mBlackTypeFace;
 
     //login member variables
     private TextView mLogoText;
@@ -64,19 +65,20 @@ public class LoginRegisterFragment extends Fragment {
         mLoginButton.setTypeface(mBoldTextTypeFace);
 
         mForgotPasswordText = (TextView)v.findViewById(R.id.forgot_password);
-        mForgotPasswordText.setTypeface(mRegularTextTypeFace);
+        mForgotPasswordText.setTypeface(mBoldTextTypeFace);
 
         mNotMemberText = (TextView)v.findViewById(R.id.not_member_text);
-        mNotMemberText.setTypeface(mRegularTextTypeFace);
+        mNotMemberText.setTypeface(mBoldTextTypeFace);
 
         mRegisterText = (TextView)v.findViewById(R.id.register_text);
-        mRegisterText.setTypeface(mBoldTextTypeFace);
+        mRegisterText.setTypeface(mBlackTypeFace);
     }
 
     private void setupTypefaces() {
         mLogoTypeFace = Typeface.createFromAsset(getActivity().getAssets(), "Good Day.ttf");
         mRegularTextTypeFace = Typeface.createFromAsset(getActivity().getAssets(), "Lato-Regular.ttf");
         mBoldTextTypeFace = Typeface.createFromAsset(getActivity().getAssets(), "Lato-Bold.ttf");
+        mBlackTypeFace = Typeface.createFromAsset(getActivity().getAssets(), "Lato-Black.ttf");
     }
 
     @Override
