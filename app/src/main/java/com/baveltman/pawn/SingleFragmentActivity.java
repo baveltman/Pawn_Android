@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-
+import android.view.Window;
 
 
 /**
@@ -18,6 +18,7 @@ public abstract class SingleFragmentActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
+
 
         //initialize and inflate activity_fragment UI
         FragmentManager fm = getSupportFragmentManager(); //using the support library for backwards compatibility pre API 11
