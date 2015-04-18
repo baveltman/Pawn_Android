@@ -22,6 +22,7 @@ public class RegisterFragment extends Fragment {
     private TextView mLogoText;
     private EditText mFirstName;
     private EditText mLastName;
+    private EditText mPhoneNumber;
     private EditText mEmail;
     private EditText mPassword;
     private TextView mRegisterButton;
@@ -52,6 +53,9 @@ public class RegisterFragment extends Fragment {
 
         mLastName = (EditText)v.findViewById(R.id.last_name);
         mLastName.setTypeface(((LoginRegistrationActivity)getActivity()).getRegularTextTypeFace());
+
+        mPhoneNumber = (EditText)v.findViewById(R.id.phone_number);
+        mPhoneNumber.setTypeface(((LoginRegistrationActivity)getActivity()).getRegularTextTypeFace());
 
         mEmail = (EditText)v.findViewById(R.id.email);
         mEmail.setTypeface(((LoginRegistrationActivity)getActivity()).getRegularTextTypeFace());
