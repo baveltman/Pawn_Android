@@ -41,9 +41,12 @@
             android:cursorVisible="false"
             android:textColor="@color/light_gray"
             android:textColorHint="@color/light_gray"
-            android:hint="@string/username"
+            android:hint="@string/email"
             android:textSize="20sp"
-            android:id="@+id/username"/>
+            android:id="@+id/username"
+            android:lines="1"
+            android:maxLines="1"
+            android:singleLine="true"/>
 
         <EditText
             android:layout_width="match_parent"
@@ -59,7 +62,10 @@
             android:inputType="textPassword"
             android:ellipsize="start"
             android:id="@+id/password"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="20dp"
+            android:lines="1"
+            android:maxLines="1"
+            android:singleLine="true"/>
 
         <TextView
             android:layout_width="match_parent"

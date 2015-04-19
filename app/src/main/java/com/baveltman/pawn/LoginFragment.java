@@ -39,8 +39,18 @@ public class LoginFragment extends Fragment {
 
         bindLoginElements(v);
         setRegisterRedirect();
+        bindInteractionEvents();
 
         return v;
+    }
+
+    private void bindInteractionEvents() {
+        mUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUsername.setCursorVisible(true);
+            }
+        });
     }
 
     private void setRegisterRedirect() {
