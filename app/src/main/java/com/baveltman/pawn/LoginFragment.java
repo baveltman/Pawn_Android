@@ -39,9 +39,19 @@ public class LoginFragment extends Fragment {
 
         bindLoginElements(v);
         setRegisterRedirect();
+        setRecoverPasswordRedirect();
         bindInteractionEvents();
 
         return v;
+    }
+
+    private void setRecoverPasswordRedirect() {
+        mForgotPasswordText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((LoginRegistrationActivity)getActivity()).slideFragment();
+            }
+        });
     }
 
     private void bindInteractionEvents() {
@@ -49,6 +59,13 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mUsername.setCursorVisible(true);
+            }
+        });
+
+        mPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPassword.setCursorVisible(true);
             }
         });
     }

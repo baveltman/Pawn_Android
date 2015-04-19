@@ -6,6 +6,7 @@
     android:background="@drawable/blue_background"
     android:padding="30dp"
     android:gravity="center"
+    android:layout_gravity="center"
     >
 
 
