@@ -92,7 +92,7 @@ public class RegisterFragment extends Fragment {
         mBackToLoginImage = (ImageView)v.findViewById(R.id.image_back_log_in);
 
         mBackToLoginText = (TextView)v.findViewById(R.id.action_back_log_in);
-        mBackToLoginText.setTypeface(((LoginRegistrationActivity)getActivity()).getBlackTypeFace());
+        mBackToLoginText.setTypeface(((LoginRegistrationActivity)getActivity()).getBoldTextTypeFace());
     }
 
 }
