@@ -1,7 +1,10 @@
 package com.baveltman.pawn;
 
 import android.app.Fragment;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -9,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -26,6 +30,8 @@ public class RegisterFragment extends Fragment {
     private EditText mEmail;
     private EditText mPassword;
     private TextView mRegisterButton;
+    private ImageView mBackToLoginImage;
+    private TextView mBackToLoginText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,8 +46,25 @@ public class RegisterFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_register, parent, false);
 
         bindRegisterElements(v);
+        bindBackToLoginClickEvents();
 
         return v;
+    }
+
+    private void bindBackToLoginClickEvents() {
+        mBackToLoginImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((LoginRegistrationActivity)getActivity()).flipCard();
+            }
+        });
+
+        mBackToLoginText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((LoginRegistrationActivity)getActivity()).flipCard();
+            }
+        });
     }
 
     private void bindRegisterElements(View v) {
@@ -65,6 +88,11 @@ public class RegisterFragment extends Fragment {
 
         mRegisterButton = (TextView)v.findViewById(R.id.register_button);
         mRegisterButton.setTypeface(((LoginRegistrationActivity)getActivity()).getBoldTextTypeFace());
+
+        mBackToLoginImage = (ImageView)v.findViewById(R.id.image_back_log_in);
+
+        mBackToLoginText = (TextView)v.findViewById(R.id.action_back_log_in);
+        mBackToLoginText.setTypeface(((LoginRegistrationActivity)getActivity()).getBlackTypeFace());
     }
 
 }
