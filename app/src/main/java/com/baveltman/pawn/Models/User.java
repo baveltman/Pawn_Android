@@ -19,6 +19,9 @@ public class User {
     @SerializedName("phone")
     private String mPhone;
 
+    @SerializedName("password")
+    private String mPassword;
+
     public String getFirstName() {
         return mFirstName;
     }
@@ -49,5 +52,13 @@ public class User {
 
     public void setPhone(String mPhone) {
         this.mPhone = mPhone;
+    }
+
+    public String getPassword() {
+        return mPassword;
+    }
+
+    public void setPassword(String mPassword) {
+        this.mPassword = mPassword;
     }
 }

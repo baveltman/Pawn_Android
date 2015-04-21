@@ -63,7 +63,9 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:id="@+id/registration_fields"
+            android:visibility="visible">
 
             <EditText
                 android:layout_width="match_parent"
@@ -71,7 +73,6 @@
                 android:background="@drawable/white_rounded_rectangle"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:cursorVisible="false"
                 android:textColor="@color/light_gray"
                 android:textColorHint="@color/light_gray"
                 android:hint="@string/first_name"
@@ -82,6 +83,8 @@
                 android:lines="1"
                 android:maxLines="1"
                 android:singleLine="true"
+                android:imeOptions="actionNext"
+                android:inputType="text"
                 />
 
             <EditText
@@ -90,7 +93,6 @@
                 android:background="@drawable/white_rounded_rectangle"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:cursorVisible="false"
                 android:textColor="@color/light_gray"
                 android:textColorHint="@color/light_gray"
                 android:hint="@string/last_name"
@@ -100,7 +102,9 @@
                 android:layout_marginTop="20dp"
                 android:lines="1"
                 android:maxLines="1"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -108,7 +112,6 @@
                 android:background="@drawable/white_rounded_rectangle"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:cursorVisible="false"
                 android:textColor="@color/light_gray"
                 android:textColorHint="@color/light_gray"
                 android:hint="@string/phone"
@@ -120,7 +123,8 @@
                 android:lines="1"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:imeOptions="actionNext"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -128,7 +132,6 @@
                 android:background="@drawable/white_rounded_rectangle"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:cursorVisible="false"
                 android:textColor="@color/light_gray"
                 android:textColorHint="@color/light_gray"
                 android:hint="@string/email"
@@ -139,7 +142,8 @@
                 android:layout_marginTop="20dp"
                 android:lines="1"
                 android:maxLines="1"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:imeOptions="actionNext"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -147,7 +151,6 @@
                 android:background="@drawable/white_rounded_rectangle"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:cursorVisible="false"
                 android:textColor="@color/light_gray"
                 android:textColorHint="@color/light_gray"
                 android:hint="@string/password"
@@ -158,7 +161,8 @@
                 android:layout_marginTop="20dp"
                 android:lines="1"
                 android:maxLines="1"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                />
 
             <TextView
                 android:layout_width="match_parent"
@@ -176,6 +180,43 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:gravity="top|center"
+            android:id="@+id/register_loading"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <fr.castorflex.android.circularprogressbar.CircularProgressBar
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:indeterminate="true"
+                app:cpb_color="#FFee44"
+                app:cpb_colors="@array/green_spinner_colors"
+                app:cpb_rotation_speed="1.0"
+                app:cpb_sweep_speed="1.0"
+                app:cpb_stroke_width="4dp"
+                app:cpb_min_sweep_angle="10"
+                app:cpb_max_sweep_angle="300"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/light_gray"
+                android:textSize="22sp"
+                android:text="@string/action_registering_user"
+                android:id="@+id/text_registering_user"/>
+
+
+
+        </LinearLayout>
 
     </LinearLayout>
+
 </LinearLayout>
