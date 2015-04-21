@@ -1,6 +1,7 @@
 package com.baveltman.pawn;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.Typeface;
@@ -16,11 +17,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baveltman.pawn.CustomViews.ViewAnimationHelper;
 import com.baveltman.pawn.Models.User;
 import com.baveltman.pawn.Models.UserResponse;
 import com.baveltman.pawn.Services.UserService;
+import com.baveltman.pawn.Validation.ValidationHelper;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -89,6 +92,8 @@ public class RegisterFragment extends Fragment {
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 ViewAnimationHelper.crossfade(mRegisterLoading, mRegisterFields, FADE_ANIMATION_DURATION);
 
                 User user = new User();
