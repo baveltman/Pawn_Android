@@ -1,6 +1,7 @@
 package com.baveltman.pawn;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
@@ -12,6 +13,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -129,16 +132,30 @@ public class RegisterFragment extends Fragment {
             }
         });
 
-        mPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus)
-                    if (mPasswordValidationMessage.getVisibility() == View.VISIBLE
-                            && mPassword.getText().length() > 0){
-                        ViewAnimationHelper.fadeOut(mPasswordValidationMessage, FADE_ANIMATION_DURATION);
+        mPassword.setOnEditorActionListener(
+                new EditText.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                                actionId == EditorInfo.IME_ACTION_DONE ||
+                                event.getAction() == KeyEvent.ACTION_DOWN &&
+                                        event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+
+                            if (mPasswordValidationMessage.getVisibility() == View.VISIBLE
+                                    && mPassword.getText().length() > 0
+                                    && ValidationHelper.isPasswordValid(mPassword.getText().toString())){
+                                ViewAnimationHelper.fadeOut(mPasswordValidationMessage, FADE_ANIMATION_DURATION);
+                            }
+
+                            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(
+                                    Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(mPassword.getWindowToken(), 0);
+                            return true;
+                        }
+                        return false;
                     }
-            }
-        });
+                }
+        );
 
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,7 +227,7 @@ public class RegisterFragment extends Fragment {
             isRegistrationValid = false;
         }
 
-        if(mPassword.getText().length() == 0){
+        if(mPassword.getText().length() == 0 || !ValidationHelper.isPasswordValid(mPassword.getText().toString())){
             ViewAnimationHelper.fadeIn(mPasswordValidationMessage, FADE_ANIMATION_DURATION);
             isRegistrationValid = false;
         }

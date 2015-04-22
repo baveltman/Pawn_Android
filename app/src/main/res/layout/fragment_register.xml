@@ -202,7 +202,7 @@
                 android:lines="1"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:imeOptions="actionNext"
+                android:imeOptions="actionDone"
                 />
 
             <TextView
