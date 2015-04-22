@@ -15,4 +15,8 @@
     <string name="action_recover_password">Recover Password</string>
     <string name="action_registering_user">Registering...</string>
     <string name="email_invalid">Email invalid</string>
+    <string name="first_name_required">Please enter your name</string>
+    <string name="last_name_required">Please enter your last name</string>
+    <string name="email_required">Please enter a valid email</string>
+    <string name="password_required">Please enter a password</string>
 </resources>

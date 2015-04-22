@@ -34,9 +34,39 @@ public class ViewAnimationHelper {
                     }
                 });
 
+    }
 
+    public static void fadeOut(final View fadeout, final int duration) {
+        fadeout.animate()
+                .alpha(0f)
+                .setDuration(duration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        fadeout.setVisibility(View.GONE);
+                    }
+                });
+    }
 
+    public static void fadeIn(final View fadeIn, final int duration) {
+        fadeIn.setAlpha(0f);
+        fadeIn.setVisibility(View.VISIBLE);
+        fadeIn.animate()
+                .alpha(1f)
+                .setDuration(duration)
+                .setListener(null);
+    }
 
+    public static void slideDown(final View slideDown, int distance, final int duration){
+        slideDown.animate()
+                .translationY(distance)
+                .setDuration(duration);
+    }
+
+    public static void slideUp(final View slideUp, final int duration){
+        slideUp.animate()
+                .translationY(0)
+                .setDuration(duration);
     }
 
 }

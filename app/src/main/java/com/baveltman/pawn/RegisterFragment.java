@@ -51,7 +51,13 @@ public class RegisterFragment extends Fragment {
 
     private LinearLayout mRegisterFields;
     private LinearLayout mRegisterLoading;
+    private LinearLayout mBackToLogin;
     private TextView mRegisteringUserText;
+
+    private TextView mFirstNameValidationMessage;
+    private TextView mLastNameValidationMessage;
+    private TextView mEmailValidationMessage;
+    private TextView mPasswordValidationMessage;
 
     private RestAdapter mRegisterRestAdapter;
     private UserService mUsersService;
@@ -93,28 +99,79 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                hideValidationMessages();
+                boolean isRegistrationValid = validateRegistrationForm();
 
-                ViewAnimationHelper.crossfade(mRegisterLoading, mRegisterFields, FADE_ANIMATION_DURATION);
+                if (isRegistrationValid){
+                    ViewAnimationHelper.fadeOut(mBackToLogin, FADE_ANIMATION_DURATION);
+                    ViewAnimationHelper.crossfade(mRegisterLoading, mRegisterFields, FADE_ANIMATION_DURATION);
 
-                User user = new User();
-                user.setFirstName(mFirstName.getText().toString());
-                user.setLastName(mLastName.getText().toString());
-                user.setEmail(mEmail.getText().toString());
-                user.setPassword(mPassword.getText().toString());
+                    User user = new User();
+                    user.setFirstName(mFirstName.getText().toString());
+                    user.setLastName(mLastName.getText().toString());
+                    user.setEmail(mEmail.getText().toString());
+                    user.setPassword(mPassword.getText().toString());
 
-                mUsersService.createUser(user, new Callback<UserResponse>() {
-                    @Override
-                    public void success(UserResponse userResponse, Response response) {
-                        Log.i(TAG, "user creation succeeded: " + userResponse.toString());
-                    }
+                    mUsersService.createUser(user, new Callback<UserResponse>() {
+                        @Override
+                        public void success(UserResponse userResponse, Response response) {
+                            Log.i(TAG, "user creation succeeded: " + userResponse.toString());
+                        }
 
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.d(TAG, "user creation failed: " + error.getMessage().toString());
-                    }
-                });
+                        @Override
+                        public void failure(RetrofitError error) {
+                            Log.d(TAG, "user creation failed: " + error.getMessage().toString());
+                        }
+                    });
+                }
+
             }
         });
+    }
+
+    private void hideValidationMessages() {
+        if (mFirstNameValidationMessage.getVisibility() == View.VISIBLE) {
+            ViewAnimationHelper.fadeOut(mFirstNameValidationMessage, FADE_ANIMATION_DURATION);
+        }
+
+        if (mLastNameValidationMessage.getVisibility() == View.VISIBLE){
+            ViewAnimationHelper.fadeOut(mLastNameValidationMessage, FADE_ANIMATION_DURATION);
+        }
+
+        if (mEmailValidationMessage.getVisibility() == View.VISIBLE){
+            ViewAnimationHelper.fadeOut(mEmailValidationMessage, FADE_ANIMATION_DURATION);
+        }
+
+        if (mPasswordValidationMessage.getVisibility() == View.VISIBLE){
+            ViewAnimationHelper.fadeOut(mPasswordValidationMessage, FADE_ANIMATION_DURATION);
+        }
+    }
+
+    private boolean validateRegistrationForm() {
+        boolean isRegistrationValid = true;
+
+        if(mFirstName.getText().length() == 0){
+            ViewAnimationHelper.fadeIn(mFirstNameValidationMessage, FADE_ANIMATION_DURATION);
+            isRegistrationValid = false;
+        }
+
+        if(mLastName.getText().length() == 0){
+            ViewAnimationHelper.fadeIn(mLastNameValidationMessage, FADE_ANIMATION_DURATION);
+            isRegistrationValid = false;
+        }
+
+        if(mEmail.getText().length() == 0 || !ValidationHelper.isEmailValid(mEmail.getText().toString())){
+            ViewAnimationHelper.fadeIn(mEmailValidationMessage, FADE_ANIMATION_DURATION);
+            isRegistrationValid = false;
+        }
+
+        if(mPassword.getText().length() == 0){
+            ViewAnimationHelper.fadeIn(mPasswordValidationMessage, FADE_ANIMATION_DURATION);
+            isRegistrationValid = false;
+        }
+
+
+        return isRegistrationValid;
     }
 
     private void bindBackToLoginClickEvents() {
@@ -162,9 +219,22 @@ public class RegisterFragment extends Fragment {
 
         mRegisterFields = (LinearLayout)v.findViewById(R.id.registration_fields);
         mRegisterLoading = (LinearLayout)v.findViewById(R.id.register_loading);
+        mBackToLogin = (LinearLayout)v.findViewById(R.id.back_to_login_view);
 
         mRegisteringUserText = (TextView)v.findViewById(R.id.text_registering_user);
         mRegisteringUserText.setTypeface(((LoginRegistrationActivity)getActivity()).getBlackTypeFace());
+
+        mFirstNameValidationMessage = (TextView)v.findViewById(R.id.first_name_validation_message);
+        mFirstNameValidationMessage.setTypeface(((LoginRegistrationActivity)getActivity()).getBoldTextTypeFace());
+
+        mLastNameValidationMessage = (TextView)v.findViewById(R.id.last_name_validation_message);
+        mLastNameValidationMessage.setTypeface(((LoginRegistrationActivity)getActivity()).getBoldTextTypeFace());
+
+        mEmailValidationMessage = (TextView)v.findViewById(R.id.email_validation_message);
+        mEmailValidationMessage.setTypeface(((LoginRegistrationActivity)getActivity()).getBoldTextTypeFace());
+
+        mPasswordValidationMessage = (TextView)v.findViewById(R.id.password_validation_message);
+        mPasswordValidationMessage.setTypeface(((LoginRegistrationActivity)getActivity()).getBoldTextTypeFace());
     }
 
 }

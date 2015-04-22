@@ -9,7 +9,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/back_to_login_view">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -84,7 +85,20 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:imeOptions="actionNext"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/first_name_required"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="-10dp"
+                android:textColor="@color/green_button_start_color"
+                android:id="@+id/first_name_validation_message"
+                android:visibility="gone"
                 />
 
             <EditText
@@ -104,7 +118,20 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:imeOptions="actionNext"
-                android:inputType="text"/>
+                android:inputType="textNoSuggestions"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/last_name_required"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="-10dp"
+                android:textColor="@color/green_button_center_color"
+                android:id="@+id/last_name_validation_message"
+                android:visibility="gone"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -146,6 +173,18 @@
                 android:imeOptions="actionNext"
                 />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/email_required"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="-10dp"
+                android:textColor="@color/green_button_end_color"
+                android:id="@+id/email_validation_message"
+                android:visibility="gone"/>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -164,6 +203,18 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/password_required"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="-10dp"
+                android:textColor="@color/green_button_start_color"
+                android:id="@+id/password_validation_message"
+                android:visibility="gone"/>
 
             <TextView
                 android:layout_width="match_parent"
