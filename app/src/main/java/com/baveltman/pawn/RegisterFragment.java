@@ -95,6 +95,51 @@ public class RegisterFragment extends Fragment {
 
     private void bindRegisterEvents() {
 
+        mFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus)
+                    if (mFirstNameValidationMessage.getVisibility() == View.VISIBLE
+                        && mFirstName.getText().length() > 0){
+                        ViewAnimationHelper.fadeOut(mFirstNameValidationMessage, FADE_ANIMATION_DURATION);
+                    }
+            }
+        });
+
+        mLastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus)
+                    if (mLastNameValidationMessage.getVisibility() == View.VISIBLE
+                            && mLastName.getText().length() > 0){
+                        ViewAnimationHelper.fadeOut(mLastNameValidationMessage, FADE_ANIMATION_DURATION);
+                    }
+            }
+        });
+
+        mEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus)
+                    if (mEmailValidationMessage.getVisibility() == View.VISIBLE
+                            && mEmail.getText().length() > 0
+                            && ValidationHelper.isEmailValid(mEmail.getText().toString())){
+                        ViewAnimationHelper.fadeOut(mEmailValidationMessage, FADE_ANIMATION_DURATION);
+                    }
+            }
+        });
+
+        mPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus)
+                    if (mPasswordValidationMessage.getVisibility() == View.VISIBLE
+                            && mPassword.getText().length() > 0){
+                        ViewAnimationHelper.fadeOut(mPasswordValidationMessage, FADE_ANIMATION_DURATION);
+                    }
+            }
+        });
+
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

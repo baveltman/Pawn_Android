@@ -22,4 +22,8 @@ public class ValidationHelper {
         }
         return isValid;
     }
+
+    public static boolean isPasswordValid(String password){
+        return password != null && password.length() >= 6;
+    }
 }
