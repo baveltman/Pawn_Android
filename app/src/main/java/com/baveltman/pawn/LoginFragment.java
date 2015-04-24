@@ -20,12 +20,18 @@ import com.baveltman.pawn.Models.Token;
 import com.baveltman.pawn.Models.User;
 import com.baveltman.pawn.Services.LoginService;
 import com.baveltman.pawn.Services.UserService;
+import com.baveltman.pawn.Validation.DateDeserializer;
 import com.baveltman.pawn.Validation.ValidationHelper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.Date;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.converter.GsonConverter;
 
 public class LoginFragment extends Fragment {
 
@@ -58,10 +64,16 @@ public class LoginFragment extends Fragment {
 
         setRetainInstance(true);
 
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .registerTypeAdapter(Date.class, new DateDeserializer())
+                .create();
+
         //create rest adapter and userService
         if (mLoginRestAdapter == null) {
             mLoginRestAdapter = new RestAdapter.Builder()
                     .setEndpoint(LoginService.ENDPOINT)
+                    .setConverter(new GsonConverter(gson))
                     .setLogLevel(RestAdapter.LogLevel.FULL)
                     .build();
         }
@@ -89,7 +101,7 @@ public class LoginFragment extends Fragment {
         mForgotPasswordText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((LoginRegistrationActivity)getActivity()).slideFragment();
+                ((LoginRegistrationActivity) getActivity()).slideFragment();
             }
         });
     }
@@ -134,9 +146,7 @@ public class LoginFragment extends Fragment {
                                 ViewAnimationHelper.fadeOut(mPasswordValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
                             }
 
-                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
-                                    Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(mPassword.getWindowToken(), 0);
+                            hideSoftKeyboard();
                             return true;
                         }
                         return false;
@@ -147,7 +157,7 @@ public class LoginFragment extends Fragment {
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                hideSoftKeyboard();
                 hideValidationMessages();
                 boolean isLoginValid = validateLoginForm();
 
@@ -163,6 +173,7 @@ public class LoginFragment extends Fragment {
                         @Override
                         public void success(Token token, Response response) {
                             Log.i(TAG, "user auth succeeded: " + token.toString());
+                            ((LoginRegistrationActivity)getActivity()).saveTokenToSharedPrefs(token);
                         }
 
                         @Override
@@ -174,6 +185,14 @@ public class LoginFragment extends Fragment {
 
             }
         });
+    }
+
+    private void hideSoftKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager)
+                getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private void setRegisterRedirect() {

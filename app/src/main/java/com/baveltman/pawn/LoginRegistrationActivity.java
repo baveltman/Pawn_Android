@@ -5,17 +5,23 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Display;
 
+import com.baveltman.pawn.Models.Token;
+import com.google.gson.Gson;
+
 
 public class LoginRegistrationActivity extends Activity
         implements FragmentManager.OnBackStackChangedListener {
 
     public static final int FADE_ANIMATION_DURATION = 300;
+    public static final String LOGIN_TOKEN = "com.baveltman.pawn.LOGIN_TOKEN";
 
     //typeFaces
     private Typeface mLogoTypeFace;
@@ -138,5 +144,14 @@ public class LoginRegistrationActivity extends Activity
 
                         // Commit the transaction.
                 .commit();
+    }
+
+    public void saveTokenToSharedPrefs(Token token){
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        Gson gson = new Gson();
+        String jsonToken = gson.toJson(token);
+        editor.putString(LOGIN_TOKEN, jsonToken);
+        editor.commit();
     }
 }

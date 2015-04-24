@@ -2,6 +2,8 @@ package com.baveltman.pawn.Models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 /**
  * model for token
  */
@@ -11,7 +13,7 @@ public class Token {
     private String mToken;
 
     @SerializedName("expires")
-    private String mExpirationDate;
+    private Date mExpirationDate;
 
     @SerializedName("user")
     private User mUser;
@@ -24,11 +26,11 @@ public class Token {
         this.mToken = mToken;
     }
 
-    public String getExpirationDate() {
+    public Date getExpirationDate() {
         return mExpirationDate;
     }
 
-    public void setExpirationDate(String mExpirationDate) {
+    public void setExpirationDate(Date mExpirationDate) {
         this.mExpirationDate = mExpirationDate;
     }
 

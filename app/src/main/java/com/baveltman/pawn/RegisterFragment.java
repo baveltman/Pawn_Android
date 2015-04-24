@@ -27,12 +27,18 @@ import com.baveltman.pawn.Models.Token;
 import com.baveltman.pawn.Models.User;
 import com.baveltman.pawn.Models.UserResponse;
 import com.baveltman.pawn.Services.UserService;
+import com.baveltman.pawn.Validation.DateDeserializer;
 import com.baveltman.pawn.Validation.ValidationHelper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.Date;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.converter.GsonConverter;
 
 /**
  * controller for register view
@@ -72,10 +78,16 @@ public class RegisterFragment extends Fragment {
 
         setRetainInstance(true);
 
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .registerTypeAdapter(Date.class, new DateDeserializer())
+                .create();
+
         //create rest adapter and userService
         if (mRegisterRestAdapter == null) {
             mRegisterRestAdapter = new RestAdapter.Builder()
                     .setEndpoint(UserService.USERS_ENDPOINT)
+                    .setConverter(new GsonConverter(gson))
                     .setLogLevel(RestAdapter.LogLevel.FULL)
                     .build();
         }
@@ -89,6 +101,7 @@ public class RegisterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_register, parent, false);
+
 
         bindRegisterElements(v);
         bindBackToLoginClickEvents();
@@ -191,6 +204,7 @@ public class RegisterFragment extends Fragment {
                         @Override
                         public void success(Token token, Response response) {
                             Log.i(TAG, "user creation succeeded: " + token.toString());
+                            ((LoginRegistrationActivity)getActivity()).saveTokenToSharedPrefs(token);
                         }
 
                         @Override
