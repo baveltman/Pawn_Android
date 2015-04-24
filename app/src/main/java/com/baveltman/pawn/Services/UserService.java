@@ -1,5 +1,6 @@
 package com.baveltman.pawn.Services;
 
+import com.baveltman.pawn.Models.Token;
 import com.baveltman.pawn.Models.User;
 import com.baveltman.pawn.Models.UserResponse;
 
@@ -16,6 +17,6 @@ public interface UserService {
     static final String USERS_ENDPOINT = "http://pawn-baveltman.rhcloud.com";
 
     @POST("/users/")
-    void createUser(@Body User user, Callback<UserResponse> callback);
+    void createUser(@Body User user, Callback<Token> callback);
 
 }

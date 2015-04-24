@@ -15,6 +15,8 @@ import android.view.Display;
 public class LoginRegistrationActivity extends Activity
         implements FragmentManager.OnBackStackChangedListener {
 
+    public static final int FADE_ANIMATION_DURATION = 300;
+
     //typeFaces
     private Typeface mLogoTypeFace;
     private Typeface mRegularTextTypeFace;

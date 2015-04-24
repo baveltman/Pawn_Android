@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baveltman.pawn.CustomViews.ViewAnimationHelper;
+import com.baveltman.pawn.Models.Token;
 import com.baveltman.pawn.Models.User;
 import com.baveltman.pawn.Models.UserResponse;
 import com.baveltman.pawn.Services.UserService;
@@ -39,7 +40,7 @@ import retrofit.client.Response;
 public class RegisterFragment extends Fragment {
 
     private static String TAG = "RegisterFragment";
-    private static final int FADE_ANIMATION_DURATION = 300;
+
 
     //member variables
     private TextView mLogoText;
@@ -104,7 +105,7 @@ public class RegisterFragment extends Fragment {
                 if (!hasFocus)
                     if (mFirstNameValidationMessage.getVisibility() == View.VISIBLE
                         && mFirstName.getText().length() > 0){
-                        ViewAnimationHelper.fadeOut(mFirstNameValidationMessage, FADE_ANIMATION_DURATION);
+                        ViewAnimationHelper.fadeOut(mFirstNameValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
                     }
             }
         });
@@ -115,7 +116,7 @@ public class RegisterFragment extends Fragment {
                 if (!hasFocus)
                     if (mLastNameValidationMessage.getVisibility() == View.VISIBLE
                             && mLastName.getText().length() > 0){
-                        ViewAnimationHelper.fadeOut(mLastNameValidationMessage, FADE_ANIMATION_DURATION);
+                        ViewAnimationHelper.fadeOut(mLastNameValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
                     }
             }
         });
@@ -127,7 +128,19 @@ public class RegisterFragment extends Fragment {
                     if (mEmailValidationMessage.getVisibility() == View.VISIBLE
                             && mEmail.getText().length() > 0
                             && ValidationHelper.isEmailValid(mEmail.getText().toString())){
-                        ViewAnimationHelper.fadeOut(mEmailValidationMessage, FADE_ANIMATION_DURATION);
+                        ViewAnimationHelper.fadeOut(mEmailValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+                    }
+            }
+        });
+
+        mPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus)
+                    if (mPasswordValidationMessage.getVisibility() == View.VISIBLE
+                            && mPassword.getText().length() > 0
+                            && ValidationHelper.isPasswordValid(mPassword.getText().toString())){
+                        ViewAnimationHelper.fadeOut(mPasswordValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
                     }
             }
         });
@@ -144,7 +157,7 @@ public class RegisterFragment extends Fragment {
                             if (mPasswordValidationMessage.getVisibility() == View.VISIBLE
                                     && mPassword.getText().length() > 0
                                     && ValidationHelper.isPasswordValid(mPassword.getText().toString())){
-                                ViewAnimationHelper.fadeOut(mPasswordValidationMessage, FADE_ANIMATION_DURATION);
+                                ViewAnimationHelper.fadeOut(mPasswordValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
                             }
 
                             InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(
@@ -165,8 +178,8 @@ public class RegisterFragment extends Fragment {
                 boolean isRegistrationValid = validateRegistrationForm();
 
                 if (isRegistrationValid){
-                    ViewAnimationHelper.fadeOut(mBackToLogin, FADE_ANIMATION_DURATION);
-                    ViewAnimationHelper.crossfade(mRegisterLoading, mRegisterFields, FADE_ANIMATION_DURATION);
+                    ViewAnimationHelper.fadeOut(mBackToLogin, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+                    ViewAnimationHelper.crossfade(mRegisterLoading, mRegisterFields, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
 
                     User user = new User();
                     user.setFirstName(mFirstName.getText().toString());
@@ -174,10 +187,10 @@ public class RegisterFragment extends Fragment {
                     user.setEmail(mEmail.getText().toString());
                     user.setPassword(mPassword.getText().toString());
 
-                    mUsersService.createUser(user, new Callback<UserResponse>() {
+                    mUsersService.createUser(user, new Callback<Token>() {
                         @Override
-                        public void success(UserResponse userResponse, Response response) {
-                            Log.i(TAG, "user creation succeeded: " + userResponse.toString());
+                        public void success(Token token, Response response) {
+                            Log.i(TAG, "user creation succeeded: " + token.toString());
                         }
 
                         @Override
@@ -193,19 +206,19 @@ public class RegisterFragment extends Fragment {
 
     private void hideValidationMessages() {
         if (mFirstNameValidationMessage.getVisibility() == View.VISIBLE) {
-            ViewAnimationHelper.fadeOut(mFirstNameValidationMessage, FADE_ANIMATION_DURATION);
+            ViewAnimationHelper.fadeOut(mFirstNameValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
         }
 
         if (mLastNameValidationMessage.getVisibility() == View.VISIBLE){
-            ViewAnimationHelper.fadeOut(mLastNameValidationMessage, FADE_ANIMATION_DURATION);
+            ViewAnimationHelper.fadeOut(mLastNameValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
         }
 
         if (mEmailValidationMessage.getVisibility() == View.VISIBLE){
-            ViewAnimationHelper.fadeOut(mEmailValidationMessage, FADE_ANIMATION_DURATION);
+            ViewAnimationHelper.fadeOut(mEmailValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
         }
 
         if (mPasswordValidationMessage.getVisibility() == View.VISIBLE){
-            ViewAnimationHelper.fadeOut(mPasswordValidationMessage, FADE_ANIMATION_DURATION);
+            ViewAnimationHelper.fadeOut(mPasswordValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
         }
     }
 
@@ -213,22 +226,22 @@ public class RegisterFragment extends Fragment {
         boolean isRegistrationValid = true;
 
         if(mFirstName.getText().length() == 0){
-            ViewAnimationHelper.fadeIn(mFirstNameValidationMessage, FADE_ANIMATION_DURATION);
+            ViewAnimationHelper.fadeIn(mFirstNameValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
             isRegistrationValid = false;
         }
 
         if(mLastName.getText().length() == 0){
-            ViewAnimationHelper.fadeIn(mLastNameValidationMessage, FADE_ANIMATION_DURATION);
+            ViewAnimationHelper.fadeIn(mLastNameValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
             isRegistrationValid = false;
         }
 
         if(mEmail.getText().length() == 0 || !ValidationHelper.isEmailValid(mEmail.getText().toString())){
-            ViewAnimationHelper.fadeIn(mEmailValidationMessage, FADE_ANIMATION_DURATION);
+            ViewAnimationHelper.fadeIn(mEmailValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
             isRegistrationValid = false;
         }
 
         if(mPassword.getText().length() == 0 || !ValidationHelper.isPasswordValid(mPassword.getText().toString())){
-            ViewAnimationHelper.fadeIn(mPasswordValidationMessage, FADE_ANIMATION_DURATION);
+            ViewAnimationHelper.fadeIn(mPasswordValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
             isRegistrationValid = false;
         }
 

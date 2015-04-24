@@ -19,4 +19,6 @@
     <string name="last_name_required">Please enter your last name</string>
     <string name="email_required">Please enter a valid email</string>
     <string name="password_required">Please enter a password with at least 6 characters</string>
+    <string name="enter_password">Please enter a password</string>
+    <string name="action_logging_in">Logging in...</string>
 </resources>

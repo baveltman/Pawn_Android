@@ -1,27 +1,54 @@
 package com.baveltman.pawn;
 
 import android.app.Fragment;
-import android.graphics.Typeface;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.baveltman.pawn.CustomViews.ViewAnimationHelper;
+import com.baveltman.pawn.Models.AuthCredentials;
+import com.baveltman.pawn.Models.Token;
+import com.baveltman.pawn.Models.User;
+import com.baveltman.pawn.Services.LoginService;
+import com.baveltman.pawn.Services.UserService;
+import com.baveltman.pawn.Validation.ValidationHelper;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class LoginFragment extends Fragment {
 
-    private static final String TAG = "LoginRegsitrationFragment";
+    private static final String TAG = "LoginFragment";
 
     //login member variables
     private TextView mLogoText;
-    private EditText mUsername;
+    private EditText mEmail;
     private EditText mPassword;
     private TextView mLoginButton;
     private TextView mForgotPasswordText;
     private TextView mNotMemberText;
     private TextView mRegisterText;
+
+    private TextView mEmailValidationMessage;
+    private TextView mPasswordValidationMessage;
+
+    private LinearLayout mLoginFieldsLayout;
+    private LinearLayout mLoginLoadingLayout;
+    private LinearLayout mNotMemberLayout;
+
+    private RestAdapter mLoginRestAdapter;
+    private LoginService mLoginService;
 
 
 
@@ -31,16 +58,29 @@ public class LoginFragment extends Fragment {
 
         setRetainInstance(true);
 
+        //create rest adapter and userService
+        if (mLoginRestAdapter == null) {
+            mLoginRestAdapter = new RestAdapter.Builder()
+                    .setEndpoint(LoginService.ENDPOINT)
+                    .setLogLevel(RestAdapter.LogLevel.FULL)
+                    .build();
+        }
+
+        if (mLoginService == null) {
+            mLoginService = mLoginRestAdapter.create(LoginService.class);
+        }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, parent, false);
 
-        bindLoginElements(v);
+        bindLoginUiElements(v);
         setRegisterRedirect();
         setRecoverPasswordRedirect();
-        bindInteractionEvents();
+        bindLoginFormInteractionEvents();
 
         return v;
     }
@@ -54,18 +94,84 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    private void bindInteractionEvents() {
-        mUsername.setOnClickListener(new View.OnClickListener() {
+    private void bindLoginFormInteractionEvents() {
+        mEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
-                mUsername.setCursorVisible(true);
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus)
+                    if (mEmailValidationMessage.getVisibility() == View.VISIBLE
+                            && mEmail.getText().length() > 0
+                            && ValidationHelper.isEmailValid(mEmail.getText().toString())){
+                        ViewAnimationHelper.fadeOut(mEmailValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+                    }
             }
         });
 
-        mPassword.setOnClickListener(new View.OnClickListener() {
+        mPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus)
+                    if (mPasswordValidationMessage.getVisibility() == View.VISIBLE
+                            && mPassword.getText().length() > 0
+                            && ValidationHelper.isPasswordValid(mPassword.getText().toString())) {
+                        ViewAnimationHelper.fadeOut(mPasswordValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+                    }
+            }
+        });
+
+        mPassword.setOnEditorActionListener(
+                new EditText.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                                actionId == EditorInfo.IME_ACTION_DONE ||
+                                event.getAction() == KeyEvent.ACTION_DOWN &&
+                                        event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+
+                            if (mPasswordValidationMessage.getVisibility() == View.VISIBLE
+                                    && mPassword.getText().length() > 0
+                                    && ValidationHelper.isPasswordValid(mPassword.getText().toString())) {
+                                ViewAnimationHelper.fadeOut(mPasswordValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+                            }
+
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
+                                    Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(mPassword.getWindowToken(), 0);
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+        );
+
+        mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPassword.setCursorVisible(true);
+
+                hideValidationMessages();
+                boolean isLoginValid = validateLoginForm();
+
+                if (isLoginValid){
+                    ViewAnimationHelper.fadeOut(mNotMemberLayout, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+                    ViewAnimationHelper.crossfade(mLoginLoadingLayout, mLoginFieldsLayout, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+
+                    AuthCredentials credentials = new AuthCredentials();
+                    credentials.setEmail(mEmail.getText().toString());
+                    credentials.setPassword(mPassword.getText().toString());
+
+                    mLoginService.authenticateUser(credentials, new Callback<Token>() {
+                        @Override
+                        public void success(Token token, Response response) {
+                            Log.i(TAG, "user auth succeeded: " + token.toString());
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            Log.d(TAG, "user auth failed: " + error.getMessage().toString());
+                        }
+                    });
+                }
+
             }
         });
     }
@@ -86,12 +192,12 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    private void bindLoginElements(View v) {
+    private void bindLoginUiElements(View v) {
         mLogoText = (TextView)v.findViewById(R.id.logo_text);
         mLogoText.setTypeface(((LoginRegistrationActivity)getActivity()).getLogoTypeFace());
 
-        mUsername = (EditText)v.findViewById(R.id.username);
-        mUsername.setTypeface(((LoginRegistrationActivity)getActivity()).getRegularTextTypeFace());
+        mEmail = (EditText)v.findViewById(R.id.email);
+        mEmail.setTypeface(((LoginRegistrationActivity) getActivity()).getRegularTextTypeFace());
 
         mPassword = (EditText)v.findViewById(R.id.password);
         mPassword.setTypeface(((LoginRegistrationActivity)getActivity()).getRegularTextTypeFace());
@@ -107,6 +213,44 @@ public class LoginFragment extends Fragment {
 
         mRegisterText = (TextView)v.findViewById(R.id.register_text);
         mRegisterText.setTypeface(((LoginRegistrationActivity)getActivity()).getBlackTypeFace());
+
+        mEmailValidationMessage = (TextView)v.findViewById(R.id.email_validation_message);
+        mEmailValidationMessage.setTypeface(((LoginRegistrationActivity)getActivity()).getBoldTextTypeFace());
+
+        mPasswordValidationMessage = (TextView)v.findViewById(R.id.password_validation_message);
+        mPasswordValidationMessage.setTypeface(((LoginRegistrationActivity)getActivity()).getBoldTextTypeFace());
+
+        mLoginFieldsLayout = (LinearLayout)v.findViewById(R.id.login_form_layout);
+        mLoginLoadingLayout = (LinearLayout)v.findViewById(R.id.login_loading);
+        mNotMemberLayout = (LinearLayout)v.findViewById(R.id.not_member_text_layout);
+    }
+
+    private void hideValidationMessages() {
+
+        if (mEmailValidationMessage.getVisibility() == View.VISIBLE){
+            ViewAnimationHelper.fadeOut(mEmailValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+        }
+
+        if (mPasswordValidationMessage.getVisibility() == View.VISIBLE){
+            ViewAnimationHelper.fadeOut(mPasswordValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+        }
+    }
+
+    private boolean validateLoginForm() {
+        boolean isLoginValid = true;
+
+        if(mEmail.getText().length() == 0 || !ValidationHelper.isEmailValid(mEmail.getText().toString())){
+            ViewAnimationHelper.fadeIn(mEmailValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+            isLoginValid = false;
+        }
+
+        if(mPassword.getText().length() == 0 || !ValidationHelper.isPasswordValid(mPassword.getText().toString())){
+            ViewAnimationHelper.fadeIn(mPasswordValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+            isLoginValid = false;
+        }
+
+
+        return isLoginValid;
     }
 
 
