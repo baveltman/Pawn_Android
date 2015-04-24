@@ -6,20 +6,25 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Display;
 
 import com.baveltman.pawn.Models.Token;
 import com.google.gson.Gson;
 
+import java.util.Date;
+
 
 public class LoginRegistrationActivity extends Activity
         implements FragmentManager.OnBackStackChangedListener {
 
+    private static final String TAG = "LoginRegActivity";
     public static final int FADE_ANIMATION_DURATION = 300;
     public static final String LOGIN_TOKEN = "com.baveltman.pawn.LOGIN_TOKEN";
 
@@ -41,6 +46,13 @@ public class LoginRegistrationActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
 
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(LOGIN_TOKEN, null);
+        editor.commit();
+
+        checkUserLoginStatus();
+
         if (savedInstanceState == null) {
             // If there is no saved instance state, add a fragment representing the
             // front of the card to this activity. If there is saved instance state,
@@ -55,10 +67,41 @@ public class LoginRegistrationActivity extends Activity
         }
 
         // Monitor back stack changes to ensure the action bar shows the appropriate
-        // button (either "photo" or "info").
         getFragmentManager().addOnBackStackChangedListener(this);
 
         setupTypefaces();
+    }
+
+    private void checkUserLoginStatus() {
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        String tokenJson = sharedPref.getString(LOGIN_TOKEN, null);
+
+        if (tokenJson != null){
+            Gson gson = new Gson();
+            Token token = gson.fromJson(tokenJson, Token.class);
+            boolean isTokenCurrent = isTokenCurrent(token);
+
+            if (isTokenCurrent){
+                Log.i(TAG, "found current token for user: " + token.getUser().getEmail());
+                redirectToPawnActivity();
+            }
+        }
+    }
+
+    public void redirectToPawnActivity() {
+        Intent i = new Intent();
+        i.setClass(this, PawnActivity.class);
+        startActivity(i);
+        overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+    }
+
+    private boolean isTokenCurrent(Token token) {
+        if (token != null){
+            Date expirationDate = token.getExpirationDate();
+            long nowUtc = System.currentTimeMillis();
+            return expirationDate != null && (expirationDate.getTime() > nowUtc);
+        }
+        return false;
     }
 
 

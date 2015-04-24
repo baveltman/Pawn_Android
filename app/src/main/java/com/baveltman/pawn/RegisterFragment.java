@@ -152,7 +152,7 @@ public class RegisterFragment extends Fragment {
                 if (!hasFocus)
                     if (mPasswordValidationMessage.getVisibility() == View.VISIBLE
                             && mPassword.getText().length() > 0
-                            && ValidationHelper.isPasswordValid(mPassword.getText().toString())){
+                            && ValidationHelper.isPasswordValid(mPassword.getText().toString())) {
                         ViewAnimationHelper.fadeOut(mPasswordValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
                     }
             }
@@ -169,13 +169,11 @@ public class RegisterFragment extends Fragment {
 
                             if (mPasswordValidationMessage.getVisibility() == View.VISIBLE
                                     && mPassword.getText().length() > 0
-                                    && ValidationHelper.isPasswordValid(mPassword.getText().toString())){
+                                    && ValidationHelper.isPasswordValid(mPassword.getText().toString())) {
                                 ViewAnimationHelper.fadeOut(mPasswordValidationMessage, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
                             }
 
-                            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(
-                                    Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(mPassword.getWindowToken(), 0);
+                            hideSoftKeyboard();
                             return true;
                         }
                         return false;
@@ -186,11 +184,11 @@ public class RegisterFragment extends Fragment {
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                hideSoftKeyboard();
                 hideValidationMessages();
                 boolean isRegistrationValid = validateRegistrationForm();
 
-                if (isRegistrationValid){
+                if (isRegistrationValid) {
                     ViewAnimationHelper.fadeOut(mBackToLogin, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
                     ViewAnimationHelper.crossfade(mRegisterLoading, mRegisterFields, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
 
@@ -204,7 +202,8 @@ public class RegisterFragment extends Fragment {
                         @Override
                         public void success(Token token, Response response) {
                             Log.i(TAG, "user creation succeeded: " + token.toString());
-                            ((LoginRegistrationActivity)getActivity()).saveTokenToSharedPrefs(token);
+                            ((LoginRegistrationActivity) getActivity()).saveTokenToSharedPrefs(token);
+                            ((LoginRegistrationActivity)getActivity()).redirectToPawnActivity();
                         }
 
                         @Override
@@ -261,6 +260,14 @@ public class RegisterFragment extends Fragment {
 
 
         return isRegistrationValid;
+    }
+
+    private void hideSoftKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager)
+                getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private void bindBackToLoginClickEvents() {

@@ -9,6 +9,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
         <activity
             android:name=".LoginRegistrationActivity"
             android:label="@string/app_name"
@@ -20,6 +21,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".PawnActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            />
+
     </application>
 
 </manifest>

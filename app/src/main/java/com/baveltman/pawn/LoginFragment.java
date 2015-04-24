@@ -174,6 +174,7 @@ public class LoginFragment extends Fragment {
                         public void success(Token token, Response response) {
                             Log.i(TAG, "user auth succeeded: " + token.toString());
                             ((LoginRegistrationActivity)getActivity()).saveTokenToSharedPrefs(token);
+                            ((LoginRegistrationActivity)getActivity()).redirectToPawnActivity();
                         }
 
                         @Override
