@@ -11,6 +11,13 @@ import android.view.ViewGroup;
  */
 public class PawnFragment extends Fragment {
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        setRetainInstance(true);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
