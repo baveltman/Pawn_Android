@@ -46,10 +46,10 @@ public class LoginRegistrationActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
 
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(LOGIN_TOKEN, null);
-        editor.commit();
+//        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        editor.putString(LOGIN_TOKEN, null);
+//        editor.commit();
 
         checkUserLoginStatus();
 

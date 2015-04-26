@@ -192,9 +192,11 @@ public class LoginFragment extends Fragment {
         InputMethodManager inputManager = (InputMethodManager)
                 getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        if (inputManager != null) {
+        try {
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
+        } catch (NullPointerException e){
+            //no soft keyboard to hide
         }
     }
 

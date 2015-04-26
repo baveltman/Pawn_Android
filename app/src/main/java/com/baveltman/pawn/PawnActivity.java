@@ -2,12 +2,14 @@ package com.baveltman.pawn;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Spannable;
-import android.text.SpannableString;
-
-import com.baveltman.pawn.CustomViews.TypefaceSpan;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 
 public class PawnActivity extends ActionBarActivity {
@@ -18,31 +20,49 @@ public class PawnActivity extends ActionBarActivity {
     private Typeface mBoldTextTypeFace;
     private Typeface mBlackTypeFace;
 
+    //drawer
+    private static final String[] mDrawerTitles = {"Log out"};
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment);
+        setContentView(R.layout.drawer_activity);
 
         setupTypefaces();
 
         getFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragmentContainer, new PawnFragment())
+                .add(R.id.content_frame, new PawnFragment())
                 .commit();
 
-        bindLogoToActionBar();
+        bindCustomActionBar();
+        bindDrawer();
 
     }
 
-    private void bindLogoToActionBar() {
-        SpannableString s = new SpannableString(getString(R.string.app_name));
-        s.setSpan(new TypefaceSpan(this, "Good Day.ttf"), 0, s.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    private void bindDrawer() {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        // Set the adapter for the list view
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, mDrawerTitles));
+    }
 
-        // Update the action bar title with the TypefaceSpan instance
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(s);
-        actionBar.show();
+    private void bindCustomActionBar() {
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater mInflater = LayoutInflater.from(this);
+
+        View mCustomView = mInflater.inflate(R.layout.custom_action_bar, null);
+        TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
+        mTitleTextView.setTypeface(getLogoTypeFace());
+
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+
     }
 
 
@@ -51,6 +71,22 @@ public class PawnActivity extends ActionBarActivity {
         mRegularTextTypeFace = Typeface.createFromAsset(getAssets(), "Lato-Regular.ttf");
         mBoldTextTypeFace = Typeface.createFromAsset(getAssets(), "Lato-Bold.ttf");
         mBlackTypeFace = Typeface.createFromAsset(getAssets(), "Lato-Black.ttf");
+    }
+
+    public Typeface getLogoTypeFace(){
+        return mLogoTypeFace;
+    }
+
+    public Typeface getRegularTextTypeFace(){
+        return mRegularTextTypeFace;
+    }
+
+    public Typeface getBoldTextTypeFace(){
+        return mRegularTextTypeFace;
+    }
+
+    public Typeface getBlackTypeFace(){
+        return mBlackTypeFace;
     }
 
 }
