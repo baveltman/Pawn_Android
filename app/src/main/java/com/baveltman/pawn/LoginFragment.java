@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baveltman.pawn.CustomViews.ViewAnimationHelper;
 import com.baveltman.pawn.Models.AuthCredentials;
@@ -180,6 +181,11 @@ public class LoginFragment extends Fragment {
                         @Override
                         public void failure(RetrofitError error) {
                             Log.d(TAG, "user auth failed: " + error.getMessage().toString());
+
+                            ViewAnimationHelper.crossfade(mLoginFieldsLayout, mLoginLoadingLayout, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+                            ViewAnimationHelper.fadeIn(mNotMemberLayout, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+
+                            Toast.makeText(getActivity(), R.string.user_login_failed , Toast.LENGTH_LONG).show();
                         }
                     });
                 }

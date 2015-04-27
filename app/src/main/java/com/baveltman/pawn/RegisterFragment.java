@@ -209,6 +209,11 @@ public class RegisterFragment extends Fragment {
                         @Override
                         public void failure(RetrofitError error) {
                             Log.d(TAG, "user creation failed: " + error.getMessage().toString());
+
+                            ViewAnimationHelper.crossfade(mRegisterFields, mRegisterLoading, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+                            ViewAnimationHelper.fadeIn(mBackToLogin, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+
+                            Toast.makeText(getActivity(), R.string.user_registration_failed, Toast.LENGTH_LONG).show();
                         }
                     });
                 }
