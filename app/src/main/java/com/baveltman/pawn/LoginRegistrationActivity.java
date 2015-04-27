@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Display;
 
 import com.baveltman.pawn.Models.Token;
+import com.baveltman.pawn.Validation.ValidationHelper;
 import com.google.gson.Gson;
 
 import java.util.Date;
@@ -79,7 +80,7 @@ public class LoginRegistrationActivity extends Activity
         if (tokenJson != null){
             Gson gson = new Gson();
             Token token = gson.fromJson(tokenJson, Token.class);
-            boolean isTokenCurrent = isTokenCurrent(token);
+            boolean isTokenCurrent = ValidationHelper.isTokenCurrent(token);
 
             if (isTokenCurrent){
                 Log.i(TAG, "found current token for user: " + token.getUser().getEmail());
@@ -93,15 +94,6 @@ public class LoginRegistrationActivity extends Activity
         i.setClass(this, PawnActivity.class);
         startActivity(i);
         overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
-    }
-
-    private boolean isTokenCurrent(Token token) {
-        if (token != null){
-            Date expirationDate = token.getExpirationDate();
-            long nowUtc = System.currentTimeMillis();
-            return expirationDate != null && (expirationDate.getTime() > nowUtc);
-        }
-        return false;
     }
 
 
