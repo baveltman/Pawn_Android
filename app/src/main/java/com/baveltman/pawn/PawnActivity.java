@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -14,6 +15,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -47,6 +50,8 @@ public class PawnActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
+
+    private boolean mIsDrawerOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +126,37 @@ public class PawnActivity extends ActionBarActivity {
         mLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDrawerLayout.openDrawer(Gravity.LEFT);
+                final Animation a = AnimationUtils.loadAnimation(PawnActivity.this,
+                        R.anim.rotate);
+                a.setDuration(300);
+                mMenuButton.startAnimation(a);
+                if (!mIsDrawerOpen) {
+                    mDrawerLayout.openDrawer(Gravity.LEFT);
+                    mIsDrawerOpen = true;
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            mMenuButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_close_white_36dp));
+                            a.setRepeatCount(0);
+                        }
+                    }, 300);
+                } else {
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    mIsDrawerOpen = false;
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            mMenuButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_white_36dp));
+                            a.setRepeatCount(0);
+                        }
+                    }, 300);
+                }
             }
         });
 
@@ -130,7 +165,37 @@ public class PawnActivity extends ActionBarActivity {
         mMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDrawerLayout.openDrawer(Gravity.LEFT);
+                final Animation a = AnimationUtils.loadAnimation(PawnActivity.this,
+                        R.anim.rotate);
+                a.setDuration(300);
+                mMenuButton.startAnimation(a);
+                if (!mIsDrawerOpen) {
+                    mDrawerLayout.openDrawer(Gravity.LEFT);
+                    mIsDrawerOpen = true;
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            mMenuButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_close_white_36dp));
+                            a.setRepeatCount(0);
+                        }
+                    }, 300);
+                } else {
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    mIsDrawerOpen = false;
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            mMenuButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_white_36dp));
+                            a.setRepeatCount(0);
+                        }
+                    }, 300);
+                }
             }
         });
 
