@@ -176,11 +176,13 @@ public class LoginFragment extends Fragment {
                             Log.i(TAG, "user auth succeeded: " + token.toString());
                             ((LoginRegistrationActivity)getActivity()).saveTokenToSharedPrefs(token);
                             ((LoginRegistrationActivity)getActivity()).redirectToPawnActivity();
+                            ViewAnimationHelper.crossfade(mLoginFieldsLayout, mLoginLoadingLayout, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+                            ViewAnimationHelper.fadeIn(mNotMemberLayout, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
                         }
 
                         @Override
                         public void failure(RetrofitError error) {
-                            Log.d(TAG, "user auth failed: " + error.getMessage().toString());
+                            Log.d(TAG, "user auth failed: " + error.getMessage());
 
                             ViewAnimationHelper.crossfade(mLoginFieldsLayout, mLoginLoadingLayout, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
                             ViewAnimationHelper.fadeIn(mNotMemberLayout, LoginRegistrationActivity.FADE_ANIMATION_DURATION);

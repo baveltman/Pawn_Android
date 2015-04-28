@@ -61,4 +61,8 @@ public class User {
     public void setPassword(String mPassword) {
         this.mPassword = mPassword;
     }
+
+    public String getFullName(){
+        return getFirstName() + " " + getLastName().charAt(0) + ".";
+    }
 }

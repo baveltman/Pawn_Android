@@ -23,4 +23,5 @@
     <string name="action_logging_in">Logging in...</string>
     <string name="user_login_failed">Log in failed. Please try again.</string>
     <string name="user_registration_failed">Registration failed. Please try again.</string>
+    <string name="action_log_out">Log Out</string>
 </resources>

@@ -204,6 +204,8 @@ public class RegisterFragment extends Fragment {
                             Log.i(TAG, "user creation succeeded: " + token.toString());
                             ((LoginRegistrationActivity) getActivity()).saveTokenToSharedPrefs(token);
                             ((LoginRegistrationActivity)getActivity()).redirectToPawnActivity();
+                            ViewAnimationHelper.crossfade(mRegisterFields, mRegisterLoading, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
+                            ViewAnimationHelper.fadeIn(mBackToLogin, LoginRegistrationActivity.FADE_ANIMATION_DURATION);
                         }
 
                         @Override

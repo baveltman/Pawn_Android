@@ -13,12 +13,16 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.baveltman.pawn.Models.Token;
+import com.baveltman.pawn.Models.User;
 import com.baveltman.pawn.Validation.ValidationHelper;
 import com.google.gson.Gson;
 
@@ -36,8 +40,9 @@ public class PawnActivity extends ActionBarActivity {
     //action bar
     private TextView mLogo;
     private ImageView mMenuButton;
+    private User mCurrentUser;
 
-    //drawer
+    //drawer_layout
     private static final String[] mDrawerTitles = {"Log out"};
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -50,20 +55,22 @@ public class PawnActivity extends ActionBarActivity {
 
         checkLoginStatus();
 
-        setupTypefaces();
+        bindDrawer();
 
         getFragmentManager()
                 .beginTransaction()
                 .add(R.id.content_frame, new PawnFragment())
                 .commit();
 
+        setupTypefaces();
+
         bindCustomActionBar();
-        bindDrawer();
+
 
     }
 
     private void checkLoginStatus() {
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences("settings", Context.MODE_PRIVATE);
         String tokenJson = sharedPref.getString(LoginRegistrationActivity.LOGIN_TOKEN, null);
 
         if (tokenJson != null){
@@ -74,8 +81,14 @@ public class PawnActivity extends ActionBarActivity {
             if (!isTokenCurrent){
                 Log.i(TAG, "found expired token for user: " + token.getUser().getEmail());
                 redirectToLoginRegistrationActivity();
+            } else {
+                mCurrentUser = token.getUser();
             }
         }
+    }
+
+    public User getCurrentUser(){
+        return mCurrentUser;
     }
 
     private void redirectToLoginRegistrationActivity() {
@@ -87,12 +100,13 @@ public class PawnActivity extends ActionBarActivity {
 
     private void bindDrawer() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        // Set the adapter for the list view
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, mDrawerTitles));
+        getFragmentManager()
+                .beginTransaction()
+                .add(R.id.left_drawer, new DrawerFragment())
+                .commit();
 
     }
+
 
     private void bindCustomActionBar() {
         ActionBar mActionBar = getSupportActionBar();
@@ -122,6 +136,7 @@ public class PawnActivity extends ActionBarActivity {
 
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
+        mActionBar.setElevation(0);
 
     }
 

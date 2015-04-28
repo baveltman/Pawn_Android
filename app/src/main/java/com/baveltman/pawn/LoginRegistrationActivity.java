@@ -74,7 +74,7 @@ public class LoginRegistrationActivity extends Activity
     }
 
     private void checkUserLoginStatus() {
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences("settings",Context.MODE_PRIVATE);
         String tokenJson = sharedPref.getString(LOGIN_TOKEN, null);
 
         if (tokenJson != null){
@@ -182,7 +182,7 @@ public class LoginRegistrationActivity extends Activity
     }
 
     public void saveTokenToSharedPrefs(Token token){
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences("settings", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         Gson gson = new Gson();
         String jsonToken = gson.toJson(token);
