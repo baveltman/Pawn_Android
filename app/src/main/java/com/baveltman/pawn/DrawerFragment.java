@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -37,6 +38,12 @@ public class DrawerFragment extends Fragment {
 
         mSettings = (TextView)v.findViewById(R.id.action_settings);
         mSettings.setTypeface(((PawnActivity) getActivity()).getBoldTextTypeFace());
+        mSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Nothing to set settings for", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         mActionLogOut = (TextView)v.findViewById(R.id.action_log_out);
         mActionLogOut.setTypeface(((PawnActivity)getActivity()).getBoldTextTypeFace());
