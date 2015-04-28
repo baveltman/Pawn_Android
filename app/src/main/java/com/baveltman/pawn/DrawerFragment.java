@@ -20,6 +20,7 @@ public class DrawerFragment extends Fragment {
 
     private TextView mUsername;
     private TextView mActionLogOut;
+    private TextView mSettings;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,9 @@ public class DrawerFragment extends Fragment {
         mUsername = (TextView)v.findViewById(R.id.user_name);
         mUsername.setTypeface(((PawnActivity)getActivity()).getBoldTextTypeFace());
         mUsername.setText(((PawnActivity) getActivity()).getCurrentUser().getFullName());
+
+        mSettings = (TextView)v.findViewById(R.id.action_settings);
+        mSettings.setTypeface(((PawnActivity) getActivity()).getBoldTextTypeFace());
 
         mActionLogOut = (TextView)v.findViewById(R.id.action_log_out);
         mActionLogOut.setTypeface(((PawnActivity)getActivity()).getBoldTextTypeFace());

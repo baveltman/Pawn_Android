@@ -63,6 +63,6 @@ public class User {
     }
 
     public String getFullName(){
-        return getFirstName() + " " + getLastName().charAt(0) + ".";
+        return getFirstName() + " " + getLastName().toUpperCase().charAt(0) + ".";
     }
 }
